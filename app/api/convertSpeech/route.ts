@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const OPENAI_API_KEY = process.env.OAI_KEY
+const OPENAI_API_KEY = process.env.OAI_KEY;
 
 export async function POST(request: Request) {
   try {
@@ -25,13 +25,16 @@ export async function POST(request: Request) {
     openaiFormData.append("file", file, fileName);
     openaiFormData.append("model", "whisper-1");
 
-    const openaiResponse = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-      },
-      body: openaiFormData,
-    });
+    const openaiResponse = await fetch(
+      "https://api.openai.com/v1/audio/transcriptions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+        },
+        body: openaiFormData,
+      }
+    );
 
     if (!openaiResponse.ok) {
       const errorBody = await openaiResponse.text();
@@ -43,9 +46,11 @@ export async function POST(request: Request) {
 
     const result = await openaiResponse.json();
     return NextResponse.json(result);
-
   } catch (error: any) {
     console.error("Error transcribing audio:", error);
-    return NextResponse.json({ error: "Server error", details: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Server error", details: error.message },
+      { status: 500 }
+    );
   }
 }
